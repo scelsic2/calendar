@@ -1,29 +1,48 @@
+// Selects Month & Year
 const calMonth = document.querySelector('.month')
-const month = dayjs().format('MMMM');
-
 const calYear = document.querySelector('.year')
-let year = dayjs().format('YYYY')
 
+// Selects all dates in calendar grid
+const dates = document.querySelectorAll('.date')
+
+// Selects forward and back buttons on month
+const back = document.querySelector('#back')
+const forward = document.querySelector('#forward')
+
+// Get Day.js Values
+const month = dayjs().format('MMMM');
+let year = dayjs().format('YYYY')
+const currentDate = dayjs().format('D')
+
+// Set Month & Year
 calMonth.innerText = month
 calYear.innerText = year
 
+// Index of Array - first day of the month
 let firstDayOfMonth 
+
+// Counter for counting up and down when navigating between months
 let countdown = 0
 
-let daysInMonth = []
+// Integer of how many days are in the month
+let daysInMonth
 
+// The array where we will push all the dates on the month into
 let dateArray
 
-function getDatesInMonth() {
+// Index in the array of months
+let monthIndex
 
+// monthIndex minus countdown
+let monthBack
+
+// Function that pushes the correct dates into the dateArray. The clicked class controls if the current month needs to be modified using the countdown variable.
+function getDatesInMonth() {
     dateArray = [];
 
     if (back.classList.contains('clicked')) {
-        daysInMonth = dayjs().subtract(1, 'month').daysInMonth()
-        console.log('-----daysInMonth if clicked-----')
-        console.log(daysInMonth)
+        daysInMonth = dayjs().subtract(countdown, 'month').daysInMonth()
     } else {
-        console.log('-----daysInMonth-----')
         daysInMonth = dayjs().daysInMonth()
     }
 
@@ -31,13 +50,14 @@ function getDatesInMonth() {
         dateArray.push(i);
     }
 
+    console.log('-----daysInMonth-----')
+    console.log(daysInMonth)
+    console.log('----dateArray-----')
     console.log(dateArray)
     return dateArray
 }
 
-
-const dates = document.querySelectorAll('.date')
-
+// For months with less than 31 days, some values at index will be undefined, and this function prevents them from appearing on screen
 function removeUndefined() {
     for (i = 0; i < dates.length; i++) {
         if (dates[i].innerText == 'undefined') {
@@ -46,20 +66,32 @@ function removeUndefined() {
     }
 }
 
-const currentDate = dayjs().format('D')
-
-const back = document.querySelector('#back')
-const forward = document.querySelector('#forward')
-
-function loadCalendar() {
-
+// Checks if current month is displayed and uses this data to determine what the first day of the diplayed month is.
+function checkForDisplayedMonth() {
     if (back.classList.contains('clicked')) {
-        console.log('class clicked is applied to back button')
+        console.log('class clicked applied to back button')
         firstDayOfMonth = dayjs().subtract(countdown, 'month').startOf('month').day()
     } else {
         firstDayOfMonth = dayjs().startOf("month").day()
     }
-    
+    return firstDayOfMonth
+}
+
+// Changes year when toggling
+function switchYear() {
+    if (calMonth.innerText == 'December') {
+        year = year - 1
+        console.log('-----year----- year - 1')
+        console.log(year)
+        dayjs().year(year)
+        calYear.innerText = year
+    }
+    return year
+}
+
+// Displays monthly calendar data
+function loadCalendar() {
+    checkForDisplayedMonth()
     getDatesInMonth()
 
     countdown = countdown + 1
@@ -345,19 +377,12 @@ function loadCalendar() {
     } 
 
     removeUndefined()
+    switchYear()
 
-    if (calMonth.innerText == 'December') {
-        year = year - 1
-        console.log(year)
-        dayjs().year(year)
-        calYear.innerText = year
-    }
-
-    return firstDayOfMonth, countdown, year
+    return firstDayOfMonth, countdown
 }
 
-loadCalendar()
-
+// Identify and highlight today's date
 function findToday() {
     for (i = 0; i < dates.length; i++) {
         if (dates[i].innerText == currentDate) {
@@ -367,8 +392,7 @@ function findToday() {
     }
 }
 
-findToday()
-
+// Unhighlight today when toggling to another month
 function removeToday() {
     for (i = 0; i < dates.length; i++) {
         const calRemoveToday = dates[i]
@@ -378,11 +402,8 @@ function removeToday() {
     }
 }
 
-let monthIndex
-let monthBack
-
+// Controls back arrow on month
 function backInTime() {
-    
     back.classList.add('clicked')
 
     monthIndex = dayjs().month()
@@ -399,5 +420,8 @@ function backInTime() {
 
     return monthBack
 }
+
+loadCalendar()
+findToday()
 
 back.addEventListener('click', backInTime)
