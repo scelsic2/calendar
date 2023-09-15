@@ -48,6 +48,10 @@ html {
     margin-bottom: 10px;
 }
 
+.hover {
+    cursor: pointer;
+}
+
 .dates-div {
     display: grid;
     text-align: center;

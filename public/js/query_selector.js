@@ -45,5 +45,3 @@ const f4 = document.querySelector('#f4')
 const f5 = document.querySelector('#f5')
 const f6 = document.querySelector('#f6')
 const f7 = document.querySelector('#f7')
-
-const dates = document.querySelectorAll('.date')
