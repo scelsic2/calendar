@@ -2,7 +2,7 @@ const calMonth = document.querySelector('.month')
 const month = dayjs().format('MMMM');
 
 const calYear = document.querySelector('.year')
-const year = dayjs().format('YYYY')
+let year = dayjs().format('YYYY')
 
 calMonth.innerText = month
 calYear.innerText = year
@@ -10,13 +10,31 @@ calYear.innerText = year
 let firstDayOfMonth 
 let countdown = 0
 
-const daysInMonth = dayjs().daysInMonth()
+let daysInMonth = []
 
-const dateArray = [];
+let dateArray
 
-for (let i = 1; i <= daysInMonth; i++) {
-    dateArray.push(i);
+function getDatesInMonth() {
+
+    dateArray = [];
+
+    if (back.classList.contains('clicked')) {
+        daysInMonth = dayjs().subtract(1, 'month').daysInMonth()
+        console.log('-----daysInMonth if clicked-----')
+        console.log(daysInMonth)
+    } else {
+        console.log('-----daysInMonth-----')
+        daysInMonth = dayjs().daysInMonth()
+    }
+
+    for (let i = 1; i <= daysInMonth; i++) {
+        dateArray.push(i);
+    }
+
+    console.log(dateArray)
+    return dateArray
 }
+
 
 const dates = document.querySelectorAll('.date')
 
@@ -36,13 +54,16 @@ const forward = document.querySelector('#forward')
 function loadCalendar() {
 
     if (back.classList.contains('clicked')) {
-        console.log('clicked')
+        console.log('class clicked is applied to back button')
         firstDayOfMonth = dayjs().subtract(countdown, 'month').startOf('month').day()
     } else {
         firstDayOfMonth = dayjs().startOf("month").day()
     }
     
+    getDatesInMonth()
+
     countdown = countdown + 1
+    console.log('-----countdown-----')
     console.log(countdown)
 
     if (firstDayOfMonth === 0) {
@@ -324,7 +345,15 @@ function loadCalendar() {
     } 
 
     removeUndefined()
-    return firstDayOfMonth, countdown
+
+    if (calMonth.innerText == 'December') {
+        year = year - 1
+        console.log(year)
+        dayjs().year(year)
+        calYear.innerText = year
+    }
+
+    return firstDayOfMonth, countdown, year
 }
 
 loadCalendar()
@@ -348,8 +377,6 @@ function removeToday() {
         }
     }
 }
-
-// firstDayOfMonth = dayjs().subtract(1, 'month').startOf('month').day()
 
 let monthIndex
 let monthBack

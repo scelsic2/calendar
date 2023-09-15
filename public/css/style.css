@@ -31,7 +31,7 @@ html {
     backdrop-filter: blur(4.5px);
     -webkit-backdrop-filter: blur(4.5px);
     width: 400px;
-    height: 300px;
+    height: 375px;
     color: aliceblue;
     padding: 10px;
     display: flex;
