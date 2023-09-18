@@ -22,7 +22,7 @@ calYear.innerText = year
 let firstDayOfMonth 
 
 // Counter for counting up and down when navigating between months
-let countdown = 0
+let counter = 0
 
 // Integer of how many days are in the month
 let daysInMonth
@@ -33,15 +33,20 @@ let dateArray
 // Index in the array of months
 let monthIndex
 
-// monthIndex minus countdown
+// monthIndex minus counter
 let monthBack
 
-// Function that pushes the correct dates into the dateArray. The clicked class controls if the current month needs to be modified using the countdown variable.
+// monthIndex plus counter
+let monthForward
+
+// Function that pushes the correct dates into the dateArray. The clicked class controls if the current month needs to be modified using the counter variable.
 function getDatesInMonth() {
     dateArray = [];
 
     if (back.classList.contains('clicked')) {
-        daysInMonth = dayjs().subtract(countdown, 'month').daysInMonth()
+        daysInMonth = dayjs().subtract(counter, 'month').daysInMonth()
+    } else if (forward.classList.contains('clicked')) {
+        daysInMonth = dayjs().add(counter, 'month').daysInMonth()
     } else {
         daysInMonth = dayjs().daysInMonth()
     }
@@ -70,18 +75,35 @@ function removeUndefined() {
 function checkForDisplayedMonth() {
     if (back.classList.contains('clicked')) {
         console.log('class clicked applied to back button')
-        firstDayOfMonth = dayjs().subtract(countdown, 'month').startOf('month').day()
+        firstDayOfMonth = dayjs().subtract(counter, 'month').startOf('month').day()
+        yearBack()
+    } else if (forward.classList.contains('clicked')) {
+        console.log('class clicked applied to forward button')
+        firstDayOfMonth = dayjs().add(counter, 'month').startOf('month').day()
+        yearForward()
     } else {
         firstDayOfMonth = dayjs().startOf("month").day()
     }
     return firstDayOfMonth
 }
 
-// Changes year when toggling
-function switchYear() {
+// Subtracts Year
+function yearBack() {
     if (calMonth.innerText == 'December') {
         year = year - 1
         console.log('-----year----- year - 1')
+        console.log(year)
+        dayjs().year(year)
+        calYear.innerText = year
+    }
+    return year
+}
+
+// Adds Year
+function yearForward() {
+    if (calMonth.innerText == 'January') {
+        year = year + 1
+        console.log('-----year----- year + 1')
         console.log(year)
         dayjs().year(year)
         calYear.innerText = year
@@ -94,9 +116,9 @@ function loadCalendar() {
     checkForDisplayedMonth()
     getDatesInMonth()
 
-    countdown = countdown + 1
-    console.log('-----countdown-----')
-    console.log(countdown)
+    // counter = counter + 1
+    // console.log('-----counter-----')
+    // console.log(counter)
 
     if (firstDayOfMonth === 0) {
         a1.innerText = dateArray[0]
@@ -377,9 +399,9 @@ function loadCalendar() {
     } 
 
     removeUndefined()
-    switchYear()
-
-    return firstDayOfMonth, countdown
+    
+    return firstDayOfMonth
+    // , counter
 }
 
 // Identify and highlight today's date
@@ -405,9 +427,15 @@ function removeToday() {
 // Controls back arrow on month
 function backInTime() {
     back.classList.add('clicked')
+    if (forward.classList.contains('clicked')) {
+        forward.classList.remove('clicked')
+    }
 
+    counter = counter + 1
+    console.log('-----counter backInTime-----')
+    console.log(counter)
     monthIndex = dayjs().month()
-    monthBack = dayjs().month(monthIndex - countdown).format('MMMM')
+    monthBack = dayjs().month(monthIndex - counter).format('MMMM')
 
     for (i = 0; i < dates.length; i++) {
         dates[i].innerText = ''
@@ -418,10 +446,37 @@ function backInTime() {
     removeToday()
     loadCalendar()
 
-    return monthBack
+    return monthBack, counter
+}
+
+// Controls forward arrow on month
+function forwardInTime() {
+    forward.classList.add('clicked')
+    if (back.classList.contains('clicked')) {
+        back.classList.remove('clicked')
+    }
+
+    counter = counter - 1
+    console.log('-----counter forwardInTime-----')
+    console.log(counter)
+    monthIndex = dayjs().month()
+    monthForward = dayjs().month(monthIndex - counter).format('MMMM')
+
+    for (i = 0; i < dates.length; i++) {
+        dates[i].innerText = ''
+    }
+
+    calMonth.innerText = monthForward
+
+    removeToday()
+    loadCalendar()
+
+    return monthForward, counter
 }
 
 loadCalendar()
 findToday()
 
+// Event Listeners
 back.addEventListener('click', backInTime)
+forward.addEventListener('click', forwardInTime)
