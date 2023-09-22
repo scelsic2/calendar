@@ -49,6 +49,10 @@ html {
 }
 
 .hover {
+    cursor: default
+}
+
+.hover-hand {
     cursor: pointer;
 }
 
@@ -69,4 +73,11 @@ html {
 .today {
     background-color: var(--highlight);
     border-radius: 50px;
+}
+
+@media only screen and (max-width: 450px) {
+    .calendar-section {
+        width: 90vw;
+        margin: auto;
+    }
 }

@@ -11,6 +11,7 @@ const forward = document.querySelector('#forward')
 
 // Get Day.js Values
 const month = dayjs().format('MMMM');
+const monthInteger = dayjs().month()
 let year = dayjs().format('YYYY')
 const currentDate = dayjs().format('D')
 
@@ -55,10 +56,6 @@ function getDatesInMonth() {
         dateArray.push(i);
     }
 
-    console.log('-----daysInMonth-----')
-    console.log(daysInMonth)
-    console.log('----dateArray-----')
-    console.log(dateArray)
     return dateArray
 }
 
@@ -74,11 +71,9 @@ function removeUndefined() {
 // Checks if current month is displayed and uses this data to determine what the first day of the diplayed month is.
 function checkForDisplayedMonth() {
     if (back.classList.contains('clicked')) {
-        console.log('class clicked applied to back button')
         firstDayOfMonth = dayjs().subtract(counter, 'month').startOf('month').day()
         yearBack()
     } else if (forward.classList.contains('clicked')) {
-        console.log('class clicked applied to forward button')
         firstDayOfMonth = dayjs().add(counter, 'month').startOf('month').day()
         yearForward()
     } else {
@@ -91,8 +86,6 @@ function checkForDisplayedMonth() {
 function yearBack() {
     if (calMonth.innerText == 'December') {
         year = year - 1
-        console.log('-----year----- year - 1')
-        console.log(year)
         dayjs().year(year)
         calYear.innerText = year
     }
@@ -103,8 +96,6 @@ function yearBack() {
 function yearForward() {
     if (calMonth.innerText == 'January') {
         year = year + 1
-        console.log('-----year----- year + 1')
-        console.log(year)
         dayjs().year(year)
         calYear.innerText = year
     }
@@ -115,10 +106,6 @@ function yearForward() {
 function loadCalendar() {
     checkForDisplayedMonth()
     getDatesInMonth()
-
-    // counter = counter + 1
-    // console.log('-----counter-----')
-    // console.log(counter)
 
     if (firstDayOfMonth === 0) {
         a1.innerText = dateArray[0]
@@ -401,17 +388,19 @@ function loadCalendar() {
     removeUndefined()
     
     return firstDayOfMonth
-    // , counter
 }
 
 // Identify and highlight today's date
 function findToday() {
-    for (i = 0; i < dates.length; i++) {
-        if (dates[i].innerText == currentDate) {
-            const calToday = dates[i];
-            calToday.classList.add('today')
-        }
+    if (counter === 0) {
+        for (i = 0; i < dates.length; i++) {
+            if (dates[i].innerText == currentDate) {
+                const calToday = dates[i];
+                calToday.classList.add('today')
+            }
+        } 
     }
+    
 }
 
 // Unhighlight today when toggling to another month
@@ -432,8 +421,7 @@ function backInTime() {
     }
 
     counter = counter + 1
-    console.log('-----counter backInTime-----')
-    console.log(counter)
+
     monthIndex = dayjs().month()
     monthBack = dayjs().month(monthIndex - counter).format('MMMM')
 
@@ -445,6 +433,7 @@ function backInTime() {
 
     removeToday()
     loadCalendar()
+    findToday()
 
     return monthBack, counter
 }
@@ -457,8 +446,7 @@ function forwardInTime() {
     }
 
     counter = counter - 1
-    console.log('-----counter forwardInTime-----')
-    console.log(counter)
+
     monthIndex = dayjs().month()
     monthForward = dayjs().month(monthIndex - counter).format('MMMM')
 
@@ -470,6 +458,7 @@ function forwardInTime() {
 
     removeToday()
     loadCalendar()
+    findToday()
 
     return monthForward, counter
 }
