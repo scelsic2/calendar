@@ -61,6 +61,11 @@ html {
     gap: 20px;
 }
 
+.dates-div > a {
+    text-decoration: none;
+    color: inherit;
+}
+
 .today {
     background-color: var(--highlight);
     border-radius: 50px;
