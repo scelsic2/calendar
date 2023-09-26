@@ -14,9 +14,9 @@ Navigate through the months.
 MIT License
 
 # Credits
-https://unsplash.com/photos/cPccYbPrF-A
-https://day.js.org/en/
-https://boxicons.com/
+- https://unsplash.com/photos/cPccYbPrF-A
+- https://day.js.org/en/
+- https://boxicons.com/
 
 ## Deployed Application Link
 
