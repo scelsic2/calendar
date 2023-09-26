@@ -85,7 +85,7 @@ function checkForDisplayedMonth() {
 // Subtracts Year
 function yearBack() {
     if (calMonth.innerText == 'December') {
-        year = year - 1
+        year = parseInt(year) - 1
         dayjs().year(year)
         calYear.innerText = year
     }
@@ -95,7 +95,7 @@ function yearBack() {
 // Adds Year
 function yearForward() {
     if (calMonth.innerText == 'January') {
-        year = year + 1
+        year = parseInt(year) + 1
         dayjs().year(year)
         calYear.innerText = year
     }
